@@ -2,7 +2,7 @@ name := """ingestion-util"""
 
 organization := "com.harrys"
 
-version := "0.0.1"
+version := "0.2.0"
 
 scalaVersion := "2.11.7"
 
@@ -10,7 +10,6 @@ exportJars := true
 
 libraryDependencies ++= Seq(
   "ch.qos.logback" % "logback-classic" % "1.1.3",
-  "com.harrys" % "source-api" % "0.1.7",
   "com.typesafe.scala-logging" %% "scala-logging" % "3.1.0",
   "commons-io" % "commons-io" % "2.4",
   "ma.glasnost.orika" % "orika-core" % "1.4.6",
