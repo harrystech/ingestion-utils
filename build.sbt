@@ -2,7 +2,7 @@ name := """ingestion-util"""
 
 organization := "com.harrys"
 
-version := "0.2.0"
+version := "0.3.0"
 
 scalaVersion := "2.11.7"
 
@@ -17,5 +17,7 @@ libraryDependencies ++= Seq(
   "org.json4s" %% "json4s-core" % "3.2.11",
   "org.json4s" %% "json4s-jackson" % "3.2.11",
   "org.json4s" %% "json4s-ext" % "3.2.11",
-  "org.postgresql" % "postgresql" % "9.4-1201-jdbc41"
+  "org.postgresql" % "postgresql" % "9.4-1201-jdbc41",
+  "com.harrys.hyppo" % "source-api" % "0.6.0",
+  "org.scalatest" %% "scalatest"  % "2.2.4"
 )
