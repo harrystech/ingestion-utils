@@ -31,7 +31,7 @@ object TestConfig {
     val sys   = System.getProperties
     if (sys.containsKey(EnvFileProperty)){
       val env = new File(sys.getProperty(EnvFileProperty))
-      if (!env.isFile){
+      if (!env.exists){
         throw new IllegalArgumentException(s"-Dtest.env-file value of ${ env.getAbsolutePath } is invalid. File does not exist.")
       } else {
         val stream = new FileInputStream(env)
