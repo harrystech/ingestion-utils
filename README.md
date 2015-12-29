@@ -74,3 +74,85 @@ object MyIntegrationSettingsPlugin extends AutoPlugin {
     props
   }
 ```
+
+Once the plugin is defined in `project` you can utilize the defined `settingKeys` in your `build.sbt`:
+
+```scala
+//  Declare the environment file location
+environmentFile := baseDirectory.value / "credentials.properties"
+
+//  Triggers loading the environment before tests run
+testOptions in Test += Tests.Setup(() => {
+  System.setProperty("test.env-file", environmentFile.value.getAbsolutePath)
+})
+```
+
+Now in your tests you can load a Config object using several of the methods on the TestConfig object:
+
+##### TestConfig.basicIngestionSource
+**returns:** IngestionSource
+
+Generates an ingestion source based off of the test Config object
+
+##### TestConfig.createNoParameterJob
+**returns:** DataIngestionJob
+
+Generates a new parameterless DataInjectionJob for the IngestionSource
+
+##### TestConfig.testConfig
+**returns:** Config
+
+Generates a TypeSafe Config object with the environment values substituted in.
+
+#### HyppoIntegrationTest
+
+HyppoIntegrationTest is an abstract class of type T where T must be an avro SpecificRecord. The goal of this class is to contain the integration plumbing under the hood, allowing the test classes themselves to be more concerned with expected outcomes rather than wiring everything up.
+
+Test classes that extend HyppoIntegrationTest must also override two vals:
+
+ * integration: IntegrationSource
+ * avroType: AvroRecord Type
+ 
+Beyond that, implementation is quite simple:
+
+```scala
+package com.harrys.my.integrations.foo
+
+import com.harrys.test.{HyppoIntegrationTest, Tags}
+import com.harrys.foo.avro.FooAvroRecord
+
+class FooIntegrationTest extends HyppoIntegrationTest[FooAvroRecord] {
+
+  override val integration  = new FooIntegration()
+  override val avroType     = integration.avroType
+
+  "The Foo event integration" must {
+
+    "create a task to fetch the events for yesterday" taggedAs Tags.RemoteAPICalls in {
+      val created = generateTasksList
+      created.size() shouldEqual 1
+    }
+
+    "wait for fetching of Foo events to complete" taggedAs Tags.RemoteAPICalls in {
+      val fetches = generateRawDataFetches
+      fetches.foreach { fetch => fetch.getDataFiles.isEmpty shouldBe false }
+    }
+
+    "successfully process the raw input to smaller avro files" taggedAs Tags.RemoteAPICalls in {
+      tasks.zip(rawFiles).foreach(pair => {
+        val appender = processAndAppendRawData(pair._1, pair._2)
+        appender.getRecordCount should be > 0L
+        appender.getRecordCount should be <= 100L
+      })
+    }
+
+    "successfully persist the processed avro" taggedAs (Tags.RemoteAPICalls, Tags.DatabaseAccess) in {
+      tasks.zip(avroFiles).foreach { pair =>
+        persistAvroRecordsToDatabase(pair._1, pair._2)
+      }
+    }
+  }
+}
+```
+
+With this framework, tests stay concise and readable, focusing on the important specifics of each integration.
