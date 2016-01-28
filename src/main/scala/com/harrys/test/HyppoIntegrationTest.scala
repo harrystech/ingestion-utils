@@ -50,7 +50,10 @@ abstract class HyppoIntegrationTest[T <: SpecificRecord] extends WordSpec with M
     val fetches = tasks.map(t => new FetchRawData(t, new RawDataCollector(rawData)))
     fetches.foreach { fetch =>
       integration.newRawDataFetcher().fetchRawData(fetch)
-      addRawData(fetch.getDataFiles.get(0))
+      val filesSeq = scala.collection.JavaConversions.asScalaBuffer(fetch.getDataFiles).toSeq
+      filesSeq.foreach { file =>
+        addRawData(file)
+      }
     }
     fetches
   }
