@@ -2,7 +2,7 @@ version: "3.7"
 services:
   db:
     image: "postgres:9.6-alpine"
-    env_file: "db.env"
+    env_file: "./db.env"
     volumes:
       # Where $PWD is the integration directory
       - "$PWD/migrations/src/main/resources:/docker-entrypoint-initdb.d"
@@ -11,18 +11,24 @@ services:
     image: "rabbitmq:3.6-alpine"
 
   manager:
-    dependsOn:
+    depends_on:
       - "db"
       - "rabbit"
-    image: "harrystech/hyppo-manager" # TODO
-    env_file: "hyppo.env"
+    image: "hyppo-manager" # TODO
+    env_file: "./hyppo.env"
     ports:
       - "9000:9000"
-    command: ["sbt", "run"]
+    command: ["/app/target/universal/stage/bin/hyppo-manager"]
+    volumes:
+      # FIXME
+      - "/Users/bryce.lohr/code/Hyppo/hyppo-manager:/app"
 
   worker:
-    dependsOn:
+    depends_on:
       - "manager"
-    image: "harrystech/hyppo-manager" # TODO
-    env_file: "hyppo.env"
-    command: ["sbt", "runMain", "com.harrys.hyppo.WorkerMain", "-Dconfig.resource=application.conf"]
+    image: "hyppo-manager" # TODO
+    env_file: "./hyppo.env"
+    command: ["/app/target/universal/stage/bin/hyppo-manager", "-main", "com.harrys.hyppo.WorkerMain", "-Dconfig.resource=application.conf"]
+    volumes:
+      # FIXME
+      - "/Users/bryce.lohr/code/Hyppo/hyppo-manager:/app"
