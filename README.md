@@ -26,3 +26,11 @@ Repeat above for each of the three dependent projects, collecting the compiled J
 2. cd hyppo-manager
 3. cp /tmp/scala-jooq-tables*.jar ./lib
 4. docker build -t hyppo-manager -f $INGESTION_UTILS_REPO/docker/Dockerfile .
+
+## 3. Configure and run Manager & Worker
+
+1. Clone repo for the Hyppo integration you want to work on.
+2. cd $TARGET_REPO
+3. cp $INGESTION_UTILS_REPO/docker/\*.template $INGESTION_UTILS_REPO/docker/docker-compose.yaml $TARGET_REPO/
+4. Fill in the `*.env.template` files with valid values.
+5. docker-compose up
