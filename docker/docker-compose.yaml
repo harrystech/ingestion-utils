@@ -18,10 +18,7 @@ services:
     env_file: "./hyppo.env"
     ports:
       - "9000:9000"
-    command: ["/app/target/universal/stage/bin/hyppo-manager"]
-    volumes:
-      # FIXME
-      - "/Users/bryce.lohr/code/Hyppo/hyppo-manager:/app"
+    command: ["/app/target/universal/stage/bin/hyppo-manager", "-Dplay.evolutions.db.default.autoApply=true"]
 
   worker:
     depends_on:
@@ -29,6 +26,3 @@ services:
     image: "hyppo-manager" # TODO
     env_file: "./hyppo.env"
     command: ["/app/target/universal/stage/bin/hyppo-manager", "-main", "com.harrys.hyppo.WorkerMain", "-Dconfig.resource=application.conf"]
-    volumes:
-      # FIXME
-      - "/Users/bryce.lohr/code/Hyppo/hyppo-manager:/app"
