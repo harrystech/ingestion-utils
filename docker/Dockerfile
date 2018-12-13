@@ -18,7 +18,4 @@ RUN /usr/local/sbt/bin/sbt "set scalaVersion := \"$SCALA_VERSION\"" console && \
 
 WORKDIR /app
 
-COPY . /app/
-RUN /usr/local/sbt/bin/sbt "set scalaVersion := \"$SCALA_VERSION\"" packageBin
-
 ENTRYPOINT ["bash"]
