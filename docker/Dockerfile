@@ -1,3 +1,6 @@
+#
+# Provides the base image for Hyppo build containers, and run-time containers for local testing.
+#
 FROM openjdk:8-jdk-alpine
 
 ARG SBT_VERSION=0.13.18
