@@ -4,7 +4,12 @@ Common utilities used to implement hyppo integrations.
 
 # Docker
 
-## 1. Build dependency JARs
+## 1. Build base image
+
+1. cd docker
+2. docker build -t hyppo-build .
+
+## 2. Build dependency JARs
 
 Clone each of these dependency repos, and build in this order:
 1. https://github.com/harrystech/scala-postgres-utils
@@ -13,21 +18,24 @@ Clone each of these dependency repos, and build in this order:
 
 For each repo:
 1. cd $TARGET_REPO
-2. docker build -t $TARGET_REPO -f $INGESTION_UTILS_REPO/docker/Dockerfile .
+    * scala-jooq-tables depends on scala-postgres-utils, therefore:
+    * mkdir lib && cp /tmp/scala-postgres-utils_*.jar lib/
+2. docker build -t $TARGET_REPO .
 3. docker create --name build $TARGET_REPO  # Lets us get the JAR out
 4. docker cp build:/app/target/scala-2.11/$BUILT_JAR_NAME /tmp  # Get JAR out of container
+5. docker rm build
 
 Repeat above for each of the three dependent projects, collecting the compiled JARs into some temporary directory you can easily find and access later.
 
-## 2. Build Hyppo Manager
+## 3. Build Hyppo Manager
 
 1. Clone the Hyppo Manager repo:
     * https://github.com/harrystech/hyppo-manager
 2. cd hyppo-manager
-3. cp /tmp/scala-jooq-tables*.jar ./lib
-4. docker build -t hyppo-manager -f $INGESTION_UTILS_REPO/docker/Dockerfile .
+3. mkdir lib && cp /tmp/scala-jooq-tables*.jar lib/
+4. docker build -t hyppo-manager .
 
-## 3. Configure and run Manager & Worker
+## 4. Configure and run Manager & Worker
 
 1. Clone repo for the Hyppo integration you want to work on.
 2. cd $TARGET_REPO
