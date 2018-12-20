@@ -26,3 +26,11 @@ services:
     image: "hyppo-manager" # TODO
     env_file: "./hyppo.env"
     command: ["/app/target/universal/stage/bin/hyppo-manager", "-main", "com.harrys.hyppo.WorkerMain", "-Dconfig.resource=application.conf"]
+
+  build:
+    depends_on:
+      - "db"
+    image: "hyppo-build"
+    volumes:
+      # Where $PWD is the integration project's root directory
+      - "$PWD:/app"
