@@ -40,5 +40,19 @@ Repeat above for each of the three dependent projects, collecting the compiled J
 1. Clone repo for the Hyppo integration you want to work on.
 2. cd $TARGET_REPO
 3. cp $INGESTION_UTILS_REPO/docker/\*.template $INGESTION_UTILS_REPO/docker/docker-compose.yaml $TARGET_REPO/
-4. Fill in the `*.env.template` files with valid values.
+4. Fill in all the `*.template` files with valid values and remove the `.template` extensions.
 5. docker-compose up
+
+## 5. Build an integration project
+
+1. Clone the ingestion project repo
+2. cd $TARGET_REPO
+3. cp $INGESTION_UTILS_REPO/docker/\*.template $INGESTION_UTILS_REPO/docker/docker-compose.yaml $TARGET_REPO/
+4. Fill in all the `*.template` files with valid values and remove the `.template` extensions.
+5. For each dependency JAR from section 2 above:
+    ```
+    $ cp /tmp/$BUILT_JAR_NAME lib/
+    ```
+6. docker-compose run build
+7. sbt
+8. docker-compose stop
