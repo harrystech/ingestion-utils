@@ -19,6 +19,7 @@ RUN tar xzf sbt.tgz && \
 RUN /usr/local/sbt/bin/sbt "set scalaVersion := \"$SCALA_VERSION\"" console && \
     rm -rf project target
 
+ENV PATH=$PATH:/usr/local/sbt/bin
 WORKDIR /app
 
 ENTRYPOINT ["bash"]
