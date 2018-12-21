@@ -14,7 +14,7 @@ services:
     depends_on:
       - "db"
       - "rabbit"
-    image: "hyppo-manager" # TODO
+    image: "hyppo-manager"
     env_file: "./hyppo.env"
     ports:
       - "9000:9000"
@@ -23,7 +23,7 @@ services:
   worker:
     depends_on:
       - "manager"
-    image: "hyppo-manager" # TODO
+    image: "hyppo-manager"
     env_file: "./hyppo.env"
     command: ["/app/target/universal/stage/bin/hyppo-manager", "-main", "com.harrys.hyppo.WorkerMain", "-Dconfig.resource=application.conf"]
 
