@@ -1,0 +1,36 @@
+version: "3.7"
+services:
+  db:
+    image: "postgres:9.6-alpine"
+    env_file: "./db.env"
+    volumes:
+      # Where $PWD is the integration project's root directory
+      - "$PWD/migrations/src/main/resources:/docker-entrypoint-initdb.d"
+
+  rabbit:
+    image: "rabbitmq:3.5.6-management"
+
+  manager:
+    depends_on:
+      - "db"
+      - "rabbit"
+    image: "hyppo-manager"
+    env_file: "./hyppo.env"
+    ports:
+      - "9000:9000"
+    command: ["/app/target/universal/stage/bin/hyppo-manager", "-Dplay.evolutions.db.default.autoApply=true"]
+
+  worker:
+    depends_on:
+      - "manager"
+    image: "hyppo-manager"
+    env_file: "./hyppo.env"
+    command: ["/app/target/universal/stage/bin/hyppo-manager", "-main", "com.harrys.hyppo.WorkerMain", "-Dconfig.resource=application.conf"]
+
+  build:
+    depends_on:
+      - "db"
+    build: "."  # There should be a Dockerfile in the integration project's root
+    volumes:
+      # Where $PWD is the integration project's root directory
+      - "$PWD:/app"
