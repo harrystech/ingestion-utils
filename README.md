@@ -16,16 +16,8 @@ Clone each of these dependency repos, and build in this order:
 2. https://github.com/harrystech/scala-jooq-tables
 3. https://github.com/harrystech/orika-utils
 
-For each repo:
-1. `cd $TARGET_REPO`
-    * scala-jooq-tables depends on scala-postgres-utils, therefore:
-    * `mkdir lib && cp /tmp/scala-postgres-utils_*.jar lib/``
-2. `docker build -t $TARGET_REPO .`
-3. `docker create --name build $TARGET_REPO`  # Lets us get the JAR out
-4. `docker cp build:/app/target/scala-2.11/$BUILT_JAR_NAME /tmp`  # Get JAR out of container
-5. `docker rm build`
-
-Repeat above for each of the three dependent projects, collecting the compiled JARs into some temporary directory you can easily find and access later.
+Run
+`make build-dependencies`
 
 ## 3. Build Hyppo Manager
 
@@ -39,10 +31,12 @@ Repeat above for each of the three dependent projects, collecting the compiled J
 
 1. Clone repo for the Hyppo integration you want to work on. You launch the Hyppo cluster from the root of the specific integration project you're working on.
 2. `cd $TARGET_REPO`
-3. `cp $INGESTION_UTILS_REPO/docker/\*.template $TARGET_REPO/`
-4. `ln -s $INGESTION_UTILS_REPO/docker/docker-compose.yaml`
-5. Fill in all the `*.template` files with valid values and remove the `.template` extensions.
-6. `docker-compose up`
+3. Copy jars needed from prior dependencies
+  `mkdir lib && cp /tmp/*.jar lib/`
+4. `cp $INGESTION_UTILS_REPO/docker/\*.template $TARGET_REPO/`
+5. `ln -s $INGESTION_UTILS_REPO/docker/docker-compose.yaml`
+6. Fill in all the `*.template` files with valid values and remove the `.template` extensions.
+7. `docker-compose up`
 
 ## 5. Build an integration project
 
