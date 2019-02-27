@@ -1,7 +1,6 @@
 # ingestion-utils
 Common utilities used to implement hyppo integrations.
 
-
 # Docker
 
 ## 1. Build base image
@@ -37,6 +36,14 @@ Run
 5. `ln -s $INGESTION_UTILS_REPO/docker/docker-compose.yaml`
 6. Fill in all the `*.template` files with valid values and remove the `.template` extensions.
 7. `docker-compose up`
+8. Comment out build section in ingestion-utils/docker/docker-compose.yaml prior to running docker-compose up for the first time. The build service will fail to complete because it will fail to access `db`.
+9. Manual hack to CREATE DATABASE $DBNAME before uncommenting and running docker-compose run build.
+10. Hack: create a file at end of sort order in `migrations/src/main/resources/` with contents “CREATE DATABASE $DBNAME”. We must delete this file once the build has succeeded.
+11. ISSUE: do not execute `sbt assembly` — instead modify Dockerfile to execute / layer `sbt update`
+12. Run docker-compose run build.
+13. Once you are dropped into the shell, run the steps under “local development” here: https://github.com/harrystech/hyppo-seko-integration .
+14. You should be live now — start engineering!
+
 
 ## 5. Build an integration project
 
