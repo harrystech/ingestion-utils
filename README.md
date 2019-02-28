@@ -24,7 +24,8 @@ Run
     * https://github.com/harrystech/hyppo-manager
 2. `cd hyppo-manager`
 3. `mkdir lib && cp /tmp/scala-jooq-tables*.jar lib/`
-4. `docker build -t hyppo-manager .`
+4. make `build-hyppo-manager`
+5. `docker build -t hyppo-manager .`
 
 ## 4. Configure and run Manager & Worker
 
