@@ -20,6 +20,7 @@ build-package:
 	mv tmp/*/*/*.jar lib/
 
 build-hyppo-manager:
+	make build-dependencies
 	mkdir ../hyppo-manager/lib || true
 	cp lib/*.jar ../hyppo-manager/lib/
 	make copy-libs project="hyppo-manager"
