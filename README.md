@@ -22,23 +22,16 @@ Run
 
 1. Clone the Hyppo Manager repo:
     * https://github.com/harrystech/hyppo-manager
-2. `cd hyppo-manager`
-3. `mkdir lib && cp /tmp/scala-jooq-tables*.jar lib/`
-4. make `build-hyppo-manager`
+2. (from ingestion-utils) make `build-hyppo-manager`
 
 ## 4. Configure and run Manager & Worker
 
 1. Clone repo for the Hyppo integration you want to work on. You launch the Hyppo cluster from the root of the specific integration project you're working on.
 2. `cd $TARGET_REPO`
-3. Copy jars needed from prior dependencies
-  `mkdir lib && cp /tmp/*.jar lib/`
-4. `cp $INGESTION_UTILS_REPO/docker/\*.template $TARGET_REPO/`
-5. `ln -s $INGESTION_UTILS_REPO/docker/docker-compose.yaml`
-6. Fill in all the `*.template` files with valid values and remove the `.template` extensions.
+3. `make setup-$TARGET-REPO`
+8. Comment out build section in ingestion-utils/docker/docker-compose.yaml.
+10. Create a file at end of sort order in `migrations/src/main/resources/` with contents “CREATE DATABASE $DBNAME”. We must delete this file once the build has succeeded.
 7. `docker-compose up`
-8. Comment out build section in ingestion-utils/docker/docker-compose.yaml prior to running docker-compose up for the first time. The build service will fail to complete because it will fail to access `db`.
-9. Manual hack to CREATE DATABASE $DBNAME before uncommenting and running docker-compose run build.
-10. Hack: create a file at end of sort order in `migrations/src/main/resources/` with contents “CREATE DATABASE $DBNAME”. We must delete this file once the build has succeeded.
 11. ISSUE: do not execute `sbt assembly` — instead modify Dockerfile to execute / layer `sbt update`
 12. Run docker-compose run build.
 13. Once you are dropped into the shell, run the steps under “local development” here: https://github.com/harrystech/hyppo-seko-integration .
