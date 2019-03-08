@@ -6,6 +6,8 @@ services:
     volumes:
       # Where $PWD is the integration project's root directory
       - "$PWD/migrations/src/main/resources:/docker-entrypoint-initdb.d"
+    ports:
+      - "5432:5432"
 
   rabbit:
     image: "rabbitmq:3.5.6-management"
