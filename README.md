@@ -5,8 +5,7 @@ Common utilities used to implement hyppo integrations.
 
 ## 1. Build base image
 
-1. `cd docker`
-2. `docker build -t hyppo-build .`
+1. `docker build -t hyppo-build docker/.`
 
 ## 2. Build dependency JARs
 
@@ -25,7 +24,7 @@ Run `make build-dependencies`
 3. (from ingestion-utils) make `build-hyppo-manager`
 
 ```
-user=user
+user=
 password=
 ```
 
@@ -35,5 +34,5 @@ password=
 2. `cd $TARGET_REPO`
 3. `make setup-$TARGET-REPO`
 7. Run `docker-compose up`
-12. Run docker-compose run build.
+12. Run `docker-compose run build`.
 13. Once you are dropped into the shell, run `sbt assembly`. Once this is done, check the logs to see where the JAR file is written and use `aws s3 cp` to move it to `S3` per the instructions in the integration README.
