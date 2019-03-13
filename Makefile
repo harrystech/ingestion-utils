@@ -28,7 +28,7 @@ build-hyppo-manager:
 dockerize-project:
 	make copy-libs project="$(project)"
 	cp docker/*.template ../$(project)/
-	ln -s docker/docker-compose.yaml ../$(project)/docker-compose.yaml
+	cp docker/docker-compose.yaml ../$(project)/docker-compose.yaml
 
 copy-libs:
 	mkdir ../$(project)/lib || true
