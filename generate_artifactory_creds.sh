@@ -2,6 +2,6 @@
 
 . ~/.artifactory/config
 
-cat ../hyppo-manager/dotfiles/harrys-artifactory.credentials.template | sed -e "s/user=/user=$user/" | sed -e "s/password=/password=$password/" > ../hyppo-manager/dotfiles/harrys-artifactory.credentials
+cat ../hyppo-manager/dotfiles/harrys-artifactory.credentials.template | sed -e "s/user=/user=$ARTIFACTORY_USERNAME/" | sed -e "s/password=/password=$ARTIFACTORY_PASSWORD/" > ../hyppo-manager/dotfiles/harrys-artifactory.credentials
 
 
