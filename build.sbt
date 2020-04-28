@@ -4,7 +4,7 @@ organization := "com.harrys"
 
 version := "0.2.0"
 
-scalaVersion := "2.11.7"
+scalaVersion := "2.11.8"
 
 exportJars := true
 
